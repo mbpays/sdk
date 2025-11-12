@@ -8,7 +8,6 @@ public class PaymentOrderRequest {
     private String orderNo;    // 商户订单号（必填）
     private String subject;     // 商品描述（必填）
     private long amount;        // 订单金额（分，必填）
-    private long expire;       // 订单过期时间（Unix 时间戳，秒级，必填）
     private String notifyUrl;   // 回调通知地址（必填）
 
     /**
@@ -16,15 +15,13 @@ public class PaymentOrderRequest {
      * @param orderNo 商户订单号（必填）
      * @param subject 商品描述（必填）
      * @param amount 订单金额（分，必填）
-     * @param expire 订单过期时间（Unix 时间戳，秒级，必填）
      * @param notifyUrl 回调通知地址（必填）
      */
-    public PaymentOrderRequest(long merchantId, String orderNo, String subject, long amount, long expire, String notifyUrl) {
+    public PaymentOrderRequest(long merchantId, String orderNo, String subject, long amount, String notifyUrl) {
         this.merchantId = merchantId;
         this.orderNo = orderNo;
         this.subject = subject;
         this.amount = amount;
-        this.expire = expire;
         this.notifyUrl = notifyUrl;
     }
 
@@ -42,10 +39,6 @@ public class PaymentOrderRequest {
 
     public long getAmount() {
         return amount;
-    }
-
-    public long getExpire() {
-        return expire;
     }
 
     public String getNotifyUrl() {

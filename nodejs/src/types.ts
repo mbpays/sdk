@@ -215,7 +215,6 @@ export class PaymentOrderRequest {
     private orderNo: string;
     private subject: string;
     private amount: number;
-    private expire: number;
     private notifyUrl: string;
 
     /**
@@ -223,7 +222,6 @@ export class PaymentOrderRequest {
      * @param orderNo 商户订单号（必填）
      * @param subject 商品描述（必填）
      * @param amount 订单金额（分，必填）
-     * @param expire 订单过期时间（Unix 时间戳，秒级，必填）
      * @param notifyUrl 回调通知地址（必填）
      */
     constructor(
@@ -231,14 +229,12 @@ export class PaymentOrderRequest {
         orderNo: string,
         subject: string,
         amount: number,
-        expire: number,
         notifyUrl: string
     ) {
         this.merchantId = merchantId;
         this.orderNo = orderNo;
         this.subject = subject;
         this.amount = amount;
-        this.expire = expire;
         this.notifyUrl = notifyUrl;
     }
 
@@ -256,10 +252,6 @@ export class PaymentOrderRequest {
 
     getAmount(): number {
         return this.amount;
-    }
-
-    getExpire(): number {
-        return this.expire;
     }
 
     getNotifyUrl(): string {

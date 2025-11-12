@@ -39,7 +39,6 @@ type PaymentOrderRequest struct {
 	OrderNo    string // 商户订单号（必填）
 	Subject    string // 商品描述（必填）
 	Amount     int64  // 订单金额（分，必填）
-	Expire     int64  // 订单过期时间（Unix 时间戳，秒级，必填）
 	NotifyURL  string // 回调通知地址（必填）
 }
 

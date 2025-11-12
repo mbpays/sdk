@@ -21,9 +21,6 @@ func (c *Client) CreatePaymentOrder(req *PaymentOrderRequest) (*PaymentOrderResp
 	if req.Amount <= 0 {
 		return nil, fmt.Errorf("amount must be greater than 0")
 	}
-	if req.Expire <= 0 {
-		return nil, fmt.Errorf("expire is required and must be greater than 0")
-	}
 	if req.NotifyURL == "" {
 		return nil, fmt.Errorf("notify_url is required")
 	}
@@ -34,7 +31,6 @@ func (c *Client) CreatePaymentOrder(req *PaymentOrderRequest) (*PaymentOrderResp
 		"order_no":    req.OrderNo,
 		"subject":     req.Subject,
 		"amount":      strconv.FormatInt(req.Amount, 10),
-		"expire":      strconv.FormatInt(req.Expire, 10),
 		"notify_url":  req.NotifyURL,
 	}
 

@@ -27,8 +27,6 @@ def create_payment_order(self: Client, req: PaymentOrderRequest) -> PaymentOrder
         raise MBPayError(0, "subject is required")
     if req.amount <= 0:
         raise MBPayError(0, "amount must be greater than 0")
-    if req.expire <= 0:
-        raise MBPayError(0, "expire is required and must be greater than 0")
     if not req.notify_url:
         raise MBPayError(0, "notify_url is required")
     
@@ -38,7 +36,6 @@ def create_payment_order(self: Client, req: PaymentOrderRequest) -> PaymentOrder
         "order_no": req.order_no,
         "subject": req.subject,
         "amount": str(req.amount),
-        "expire": str(req.expire),
         "notify_url": req.notify_url,
     }
     

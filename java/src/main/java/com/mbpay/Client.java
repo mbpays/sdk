@@ -317,9 +317,6 @@ public class Client {
         if (req.getAmount() <= 0) {
             throw new MBPayException(0, "amount must be greater than 0");
         }
-        if (req.getExpire() <= 0) {
-            throw new MBPayException(0, "expire is required and must be greater than 0");
-        }
         if (req.getNotifyUrl() == null || req.getNotifyUrl().isEmpty()) {
             throw new MBPayException(0, "notify_url is required");
         }
@@ -330,7 +327,6 @@ public class Client {
         params.put("order_no", req.getOrderNo());
         params.put("subject", req.getSubject());
         params.put("amount", String.valueOf(req.getAmount()));
-        params.put("expire", String.valueOf(req.getExpire()));
         params.put("notify_url", req.getNotifyUrl());
 
         // 执行请求

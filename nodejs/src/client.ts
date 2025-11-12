@@ -357,9 +357,6 @@ export class Client {
         if (req.getAmount() <= 0) {
             throw new MBPayError(0, 'amount must be greater than 0');
         }
-        if (req.getExpire() <= 0) {
-            throw new MBPayError(0, 'expire is required and must be greater than 0');
-        }
         if (!req.getNotifyUrl()) {
             throw new MBPayError(0, 'notify_url is required');
         }
@@ -370,7 +367,6 @@ export class Client {
             order_no: req.getOrderNo(),
             subject: req.getSubject(),
             amount: String(req.getAmount()),
-            expire: String(req.getExpire()),
             notify_url: req.getNotifyUrl(),
         };
 

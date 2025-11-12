@@ -223,7 +223,6 @@ POST /merchant/generatepaylink
 | order_no | string | 是 | 商户订单号（必须唯一，建议使用时间戳+随机数） |
 | subject | string | 是 | 商品描述 |
 | amount | int64 | 是 | 订单金额（分，必须大于 0） |
-| expire | int64 | 是 | 订单过期时间（Unix 时间戳，秒级，必须大于当前时间） |
 | notify_url | string | 是 | 支付成功后的回调通知地址 |
 | app_id | string | 是 | 商户的 App ID |
 | timestamp | int64 | 是 | Unix 时间戳 |
@@ -238,7 +237,6 @@ curl -X POST "https://www.mbpay.world/merchant/generatepaylink" \
   -d "order_no=ORD202501011200001234567890" \
   -d "subject=购买VIP会员" \
   -d "amount=10000" \
-  -d "expire=1704067200" \
   -d "notify_url=https://example.com/notify" \
   -d "app_id=your_app_id_123" \
   -d "timestamp=1704067200" \
@@ -288,12 +286,11 @@ curl -X POST "https://www.mbpay.world/merchant/generatepaylink" \
 | 12010 | notify_url 为空 |
 | 12011 | 订单号已存在 / 商户不存在 |
 | 12012 | amount 为空或无效 |
-| 12013 | expire_time_error（过期时间错误，必须大于当前时间） |
 
 #### 业务说明
 
 1. **订单号唯一性**：`order_no` 必须在商户维度内唯一，重复的订单号会返回错误
-2. **过期时间**：`expire` 必须是 Unix 时间戳（秒级），且必须大于当前时间
+2. **过期时间**：订单过期时间由系统自动设置为创建时间后10分钟
 3. **回调通知**：支付成功后，系统会向 `notify_url` 发送回调通知
 4. **收银台链接**：返回的 `payment_link` 是收银台页面链接，用户访问此链接进行支付
 
@@ -415,7 +412,6 @@ curl -X POST "https://www.mbpay.world/merchant/pay" \
 | 12010 | 余额不足 | 商户余额不足以支付订单金额和手续费 |
 | 12011 | 订单号已存在 / 收款地址不存在 | 检查订单号是否重复，或收款地址是否正确 |
 | 12012 | 系统错误 | 系统内部错误，稍后重试或联系技术支持 |
-| 12013 | 过期时间错误 | expire 必须大于当前时间 |
 
 ---
 

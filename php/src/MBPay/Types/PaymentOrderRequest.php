@@ -11,7 +11,6 @@ class PaymentOrderRequest
     private $orderNo;      // 商户订单号（必填）
     private $subject;      // 商品描述（必填）
     private $amount;       // 订单金额（分，必填）
-    private $expire;       // 订单过期时间（Unix 时间戳，秒级，必填）
     private $notifyUrl;    // 回调通知地址（必填）
 
     /**
@@ -19,16 +18,14 @@ class PaymentOrderRequest
      * @param string $orderNo 商户订单号（必填）
      * @param string $subject 商品描述（必填）
      * @param int $amount 订单金额（分，必填）
-     * @param int $expire 订单过期时间（Unix 时间戳，秒级，必填）
      * @param string $notifyUrl 回调通知地址（必填）
      */
-    public function __construct($merchantId, $orderNo, $subject, $amount, $expire, $notifyUrl)
+    public function __construct($merchantId, $orderNo, $subject, $amount, $notifyUrl)
     {
         $this->merchantId = $merchantId;
         $this->orderNo = $orderNo;
         $this->subject = $subject;
         $this->amount = $amount;
-        $this->expire = $expire;
         $this->notifyUrl = $notifyUrl;
     }
 
@@ -50,11 +47,6 @@ class PaymentOrderRequest
     public function getAmount()
     {
         return $this->amount;
-    }
-
-    public function getExpire()
-    {
-        return $this->expire;
     }
 
     public function getNotifyUrl()

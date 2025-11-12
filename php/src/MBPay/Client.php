@@ -354,9 +354,6 @@ class Client
         if ($req->getAmount() <= 0) {
             throw new MBPayException(0, 'amount must be greater than 0');
         }
-        if ($req->getExpire() <= 0) {
-            throw new MBPayException(0, 'expire is required and must be greater than 0');
-        }
         if (empty($req->getNotifyUrl())) {
             throw new MBPayException(0, 'notify_url is required');
         }
@@ -367,7 +364,6 @@ class Client
             'order_no' => $req->getOrderNo(),
             'subject' => $req->getSubject(),
             'amount' => (string)$req->getAmount(),
-            'expire' => (string)$req->getExpire(),
             'notify_url' => $req->getNotifyUrl(),
         ];
 

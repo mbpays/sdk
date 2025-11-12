@@ -129,7 +129,6 @@ class PaymentOrderRequest:
         order_no: str,
         subject: str,
         amount: int,
-        expire: int,
         notify_url: str
     ):
         """
@@ -140,14 +139,12 @@ class PaymentOrderRequest:
             order_no: 商户订单号（必填）
             subject: 商品描述（必填）
             amount: 订单金额（分，必填）
-            expire: 订单过期时间（Unix 时间戳，秒级，必填）
             notify_url: 回调通知地址（必填）
         """
         self.merchant_id = merchant_id
         self.order_no = order_no
         self.subject = subject
         self.amount = amount
-        self.expire = expire
         self.notify_url = notify_url
 
 
