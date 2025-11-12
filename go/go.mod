@@ -1,4 +1,4 @@
-module github.com/mbpay/sdk/go/mbpay
+module github.com/mbpay/sdk/go
 
 go 1.16
 
