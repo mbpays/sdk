@@ -163,3 +163,50 @@ class PaymentOrderResponse:
     def __repr__(self):
         return f"PaymentOrderResponse(payment_link={self.payment_link})"
 
+
+class OrderInfoResponse:
+    """订单信息响应"""
+    
+    def __init__(
+        self,
+        order_no: str,
+        platform_order_no: str,
+        amount: int,
+        platform_fee: int,
+        status: int,
+        status_text: str,
+        expires_at: str,
+        created_at: str,
+        paid_at: str
+    ):
+        """
+        订单信息响应
+        
+        Args:
+            order_no: 商户订单号
+            platform_order_no: 平台订单号
+            amount: 订单金额
+            platform_fee: 平台手续费
+            status: 订单状态
+            status_text: 订单状态文本
+            expires_at: 过期时间
+            created_at: 创建时间
+            paid_at: 支付时间
+        """
+        self.order_no = order_no
+        self.platform_order_no = platform_order_no
+        self.amount = amount
+        self.platform_fee = platform_fee
+        self.status = status
+        self.status_text = status_text
+        self.expires_at = expires_at
+        self.created_at = created_at
+        self.paid_at = paid_at
+    
+    def __repr__(self):
+        return (
+            f"OrderInfoResponse(order_no={self.order_no}, "
+            f"platform_order_no={self.platform_order_no}, "
+            f"amount={self.amount}, status={self.status})"
+        )
+

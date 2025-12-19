@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import https from 'https';
 import http from 'http';
 import { URL, URLSearchParams } from 'url';
-import { Response, BalanceResponse, PayResponse, PaymentLinkRequest, PayRequest, PaymentOrderRequest, PaymentOrderResponse } from './types';
+import { Response, BalanceResponse, PayResponse, PaymentLinkRequest, PayRequest, PaymentOrderRequest, PaymentOrderResponse, OrderInfoResponse } from './types';
 import { MBPayError } from './error';
 
 export class Client {
@@ -382,6 +382,61 @@ export class Client {
         }
 
         return new PaymentOrderResponse(paymentLink);
+    }
+
+    /**
+     * 查询订单信息
+     *
+     * @param orderNo 商户订单号
+     * @param merchantId 商户ID
+     * @returns Promise<OrderInfoResponse>
+     * @throws MBPayError
+     */
+    async getOrderInfo(orderNo: string, merchantId: number): Promise<OrderInfoResponse> {
+        // 参数验证
+        if (!orderNo) {
+            throw new MBPayError(0, 'order_no is required');
+        }
+        if (merchantId <= 0) {
+            throw new MBPayError(0, 'merchant_id is required and must be greater than 0');
+        }
+
+        // 构建请求参数
+        const params: Record<string, string> = {
+            order_no: orderNo,
+            merchant_id: String(merchantId),
+        };
+
+        // 执行请求
+        const resp = await this.doRequest('POST', '/merchant/orderinfo', params);
+
+        // 解析 data 字段
+        const data = resp.getData();
+        const orderNoResp = data.order_no as string || '';
+        const platformOrderNo = data.platform_order_no as string || '';
+        const amount = parseInt(String(data.amount || 0), 10);
+        const platformFee = parseInt(String(data.platform_fee || 0), 10);
+        const status = parseInt(String(data.status || 0), 10);
+        const statusText = data.status_text as string || '';
+        const expiresAt = data.expires_at as string || '';
+        const createdAt = data.created_at as string || '';
+        const paidAt = data.paid_at as string || '';
+
+        if (!orderNoResp) {
+            throw new MBPayError(0, 'invalid order_no format in response');
+        }
+
+        return new OrderInfoResponse(
+            orderNoResp,
+            platformOrderNo,
+            amount,
+            platformFee,
+            status,
+            statusText,
+            expiresAt,
+            createdAt,
+            paidAt
+        );
     }
 }
 

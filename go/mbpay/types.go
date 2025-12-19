@@ -47,6 +47,19 @@ type PaymentOrderResponse struct {
 	PaymentLink string `json:"payment_link"` // 收银台页面链接
 }
 
+// OrderInfoResponse 订单信息响应
+type OrderInfoResponse struct {
+	OrderNo         string `json:"order_no"`          // 商户订单号
+	PlatformOrderNo string `json:"platform_order_no"` // 平台订单号
+	Amount          int64  `json:"amount"`            // 订单金额
+	PlatformFee     int64  `json:"platform_fee"`      // 平台手续费
+	Status          int    `json:"status"`            // 订单状态
+	StatusText      string `json:"status_text"`       // 订单状态文本
+	ExpiresAt       string `json:"expires_at"`        // 过期时间
+	CreatedAt       string `json:"created_at"`        // 创建时间
+	PaidAt          string `json:"paid_at"`           // 支付时间
+}
+
 // ErrorCode 错误码常量
 const (
 	ErrCodeSuccess                   = 0     // 成功
@@ -62,6 +75,8 @@ const (
 	ErrCodeInsufficientBalance       = 12010 // 余额不足
 	ErrCodeOrderExistsOrAddrNotFound = 12011 // 订单号已存在 / 收款地址不存在
 	ErrCodeSystemError               = 12012 // 系统错误
+	ErrCodeOrderNoEmpty              = 12013 // 订单号为空
+	ErrCodeOrderNotFound             = 12014 // 订单不存在
 )
 
 // Error 自定义错误类型
@@ -94,4 +109,3 @@ func (r *Response) ToError() *Error {
 	}
 	return NewError(r.Code, r.Message)
 }
-

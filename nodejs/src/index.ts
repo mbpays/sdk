@@ -12,6 +12,7 @@ export {
     PaymentLinkRequest,
     PaymentOrderRequest,
     PaymentOrderResponse,
+    OrderInfoResponse,
 } from './types';
 export { MBPayError, ErrorCode } from './error';
 

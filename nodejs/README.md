@@ -107,6 +107,22 @@ try {
 }
 ```
 
+### 5. 查询订单信息
+
+```typescript
+try {
+    const orderInfo = await client.getOrderInfo('ORD202501011200001234567890', 12345);
+    console.log(`订单号: ${orderInfo.getOrderNo()}`);
+    console.log(`平台订单号: ${orderInfo.getPlatformOrderNo()}`);
+    console.log(`订单金额: ${orderInfo.getAmount()}`);
+    console.log(`订单状态: ${orderInfo.getStatusText()}`);
+} catch (error) {
+    if (error instanceof MBPayError) {
+        console.log(`查询失败: ${error.message}`);
+    }
+}
+```
+
 ## API 文档
 
 ### Client
@@ -182,6 +198,29 @@ try {
 - 链接中包含订单信息、签名等，用户扫码后可以直接支付
 - 过期时间从生成链接时开始计算
 
+#### `getOrderInfo(orderNo: string, merchantId: number): Promise<OrderInfoResponse>`
+
+查询订单信息。
+
+**参数：**
+- `orderNo` (string, 必填): 商户订单号
+- `merchantId` (number, 必填): 商户ID
+
+**返回：**
+- `Promise<OrderInfoResponse>`: 订单信息响应
+  - `getOrderNo()`: 商户订单号
+  - `getPlatformOrderNo()`: 平台订单号
+  - `getAmount()`: 订单金额
+  - `getPlatformFee()`: 平台手续费
+  - `getStatus()`: 订单状态
+  - `getStatusText()`: 订单状态文本
+  - `getExpiresAt()`: 过期时间
+  - `getCreatedAt()`: 创建时间
+  - `getPaidAt()`: 支付时间
+
+**异常：**
+- `MBPayError`: API 业务错误
+
 ## 错误处理
 
 SDK 使用自定义错误类型 `MBPayError`，包含错误码和错误信息：
@@ -226,6 +265,8 @@ try {
 | 12010 | `ErrorCode.INSUFFICIENT_BALANCE` | 余额不足 |
 | 12011 | `ErrorCode.ORDER_EXISTS_OR_ADDR_NOT_FOUND` | 订单号已存在 / 收款地址不存在 |
 | 12012 | `ErrorCode.SYSTEM_ERROR` | 系统错误 |
+| 12013 | - | 订单号为空 |
+| 12014 | - | 订单不存在 |
 
 ## 签名说明
 

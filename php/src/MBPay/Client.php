@@ -380,6 +380,62 @@ class Client
 
         return new Types\PaymentOrderResponse($paymentLink);
     }
+
+    /**
+     * 查询订单信息
+     *
+     * @param string $orderNo 商户订单号
+     * @param int $merchantId 商户ID
+     * @return Types\OrderInfoResponse 订单信息响应
+     * @throws MBPayException
+     */
+    public function getOrderInfo(string $orderNo, int $merchantId): Types\OrderInfoResponse
+    {
+        // 参数验证
+        if (empty($orderNo)) {
+            throw new MBPayException(0, 'order_no is required');
+        }
+        if ($merchantId <= 0) {
+            throw new MBPayException(0, 'merchant_id is required and must be greater than 0');
+        }
+
+        // 构建请求参数
+        $params = [
+            'order_no' => $orderNo,
+            'merchant_id' => (string)$merchantId,
+        ];
+
+        // 执行请求
+        $resp = $this->doRequest('POST', '/merchant/orderinfo', $params);
+
+        // 解析 data 字段
+        $data = $resp->getData();
+        $orderNoResp = $data['order_no'] ?? '';
+        $platformOrderNo = $data['platform_order_no'] ?? '';
+        $amount = (int)($data['amount'] ?? 0);
+        $platformFee = (int)($data['platform_fee'] ?? 0);
+        $status = (int)($data['status'] ?? 0);
+        $statusText = $data['status_text'] ?? '';
+        $expiresAt = $data['expires_at'] ?? '';
+        $createdAt = $data['created_at'] ?? '';
+        $paidAt = $data['paid_at'] ?? '';
+
+        if (empty($orderNoResp)) {
+            throw new MBPayException(0, 'invalid order_no format in response');
+        }
+
+        return new Types\OrderInfoResponse(
+            $orderNoResp,
+            $platformOrderNo,
+            $amount,
+            $platformFee,
+            $status,
+            $statusText,
+            $expiresAt,
+            $createdAt,
+            $paidAt
+        );
+    }
 }
 
 

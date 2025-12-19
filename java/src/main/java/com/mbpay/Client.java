@@ -342,6 +342,60 @@ public class Client {
 
         return new model.PaymentOrderResponse(paymentLink);
     }
+
+    /**
+     * 查询订单信息
+     *
+     * @param orderNo 商户订单号
+     * @param merchantId 商户ID
+     * @return OrderInfoResponse 订单信息响应
+     * @throws MBPayException
+     */
+    public model.OrderInfoResponse getOrderInfo(String orderNo, long merchantId) throws MBPayException {
+        // 参数验证
+        if (orderNo == null || orderNo.isEmpty()) {
+            throw new MBPayException(0, "order_no is required");
+        }
+        if (merchantId <= 0) {
+            throw new MBPayException(0, "merchant_id is required and must be greater than 0");
+        }
+
+        // 构建请求参数
+        Map<String, String> params = new HashMap<>();
+        params.put("order_no", orderNo);
+        params.put("merchant_id", String.valueOf(merchantId));
+
+        // 执行请求
+        Response resp = doRequest("POST", "/merchant/orderinfo", params);
+
+        // 解析 data 字段
+        Map<String, Object> data = resp.getData();
+        String orderNoResp = (String) data.get("order_no");
+        String platformOrderNo = (String) data.getOrDefault("platform_order_no", "");
+        long amount = Long.parseLong(String.valueOf(data.getOrDefault("amount", 0)));
+        long platformFee = Long.parseLong(String.valueOf(data.getOrDefault("platform_fee", 0)));
+        int status = Integer.parseInt(String.valueOf(data.getOrDefault("status", 0)));
+        String statusText = (String) data.getOrDefault("status_text", "");
+        String expiresAt = (String) data.getOrDefault("expires_at", "");
+        String createdAt = (String) data.getOrDefault("created_at", "");
+        String paidAt = (String) data.getOrDefault("paid_at", "");
+
+        if (orderNoResp == null || orderNoResp.isEmpty()) {
+            throw new MBPayException(0, "invalid order_no format in response");
+        }
+
+        return new model.OrderInfoResponse(
+                orderNoResp,
+                platformOrderNo != null ? platformOrderNo : "",
+                amount,
+                platformFee,
+                status,
+                statusText != null ? statusText : "",
+                expiresAt != null ? expiresAt : "",
+                createdAt != null ? createdAt : "",
+                paidAt != null ? paidAt : ""
+        );
+    }
 }
 
 

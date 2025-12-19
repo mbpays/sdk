@@ -277,6 +277,90 @@ export class PaymentOrderResponse {
     }
 }
 
+/**
+ * 订单信息响应
+ */
+export class OrderInfoResponse {
+    private orderNo: string;
+    private platformOrderNo: string;
+    private amount: number;
+    private platformFee: number;
+    private status: number;
+    private statusText: string;
+    private expiresAt: string;
+    private createdAt: string;
+    private paidAt: string;
+
+    /**
+     * @param orderNo 商户订单号
+     * @param platformOrderNo 平台订单号
+     * @param amount 订单金额
+     * @param platformFee 平台手续费
+     * @param status 订单状态
+     * @param statusText 订单状态文本
+     * @param expiresAt 过期时间
+     * @param createdAt 创建时间
+     * @param paidAt 支付时间
+     */
+    constructor(
+        orderNo: string,
+        platformOrderNo: string,
+        amount: number,
+        platformFee: number,
+        status: number,
+        statusText: string,
+        expiresAt: string,
+        createdAt: string,
+        paidAt: string
+    ) {
+        this.orderNo = orderNo;
+        this.platformOrderNo = platformOrderNo;
+        this.amount = amount;
+        this.platformFee = platformFee;
+        this.status = status;
+        this.statusText = statusText;
+        this.expiresAt = expiresAt;
+        this.createdAt = createdAt;
+        this.paidAt = paidAt;
+    }
+
+    getOrderNo(): string {
+        return this.orderNo;
+    }
+
+    getPlatformOrderNo(): string {
+        return this.platformOrderNo;
+    }
+
+    getAmount(): number {
+        return this.amount;
+    }
+
+    getPlatformFee(): number {
+        return this.platformFee;
+    }
+
+    getStatus(): number {
+        return this.status;
+    }
+
+    getStatusText(): string {
+        return this.statusText;
+    }
+
+    getExpiresAt(): string {
+        return this.expiresAt;
+    }
+
+    getCreatedAt(): string {
+        return this.createdAt;
+    }
+
+    getPaidAt(): string {
+        return this.paidAt;
+    }
+}
+
 
 
 

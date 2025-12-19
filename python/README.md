@@ -83,6 +83,16 @@ print(f"支付链接: {payment_link}")
 # 可以将此链接用于生成二维码
 ```
 
+### 5. 查询订单信息
+
+```python
+order_info = client.get_order_info("ORD202501011200001234567890", 12345)
+print(f"订单号: {order_info.order_no}")
+print(f"平台订单号: {order_info.platform_order_no}")
+print(f"订单金额: {order_info.amount}")
+print(f"订单状态: {order_info.status_text}")
+```
+
 ## API 文档
 
 ### Client
@@ -160,6 +170,30 @@ print(f"支付链接: {payment_link}")
 - 链接中包含订单信息、签名等，用户扫码后可以直接支付
 - 过期时间从生成链接时开始计算
 
+#### `get_order_info(order_no: str, merchant_id: int) -> OrderInfoResponse`
+
+查询订单信息。
+
+**参数：**
+- `order_no` (str, 必填): 商户订单号
+- `merchant_id` (int, 必填): 商户ID
+
+**返回：**
+- `OrderInfoResponse`: 订单信息响应
+  - `order_no` (str): 商户订单号
+  - `platform_order_no` (str): 平台订单号
+  - `amount` (int): 订单金额
+  - `platform_fee` (int): 平台手续费
+  - `status` (int): 订单状态
+  - `status_text` (str): 订单状态文本
+  - `expires_at` (str): 过期时间
+  - `created_at` (str): 创建时间
+  - `paid_at` (str): 支付时间
+
+**异常：**
+- `MBPayError`: API 业务错误
+- `requests.RequestException`: 网络请求错误
+
 ## 错误处理
 
 SDK 使用自定义异常类型 `MBPayError`，包含错误码和错误信息：
@@ -197,6 +231,8 @@ except Exception as e:
 | 12010 | `ErrorCode.INSUFFICIENT_BALANCE` | 余额不足 |
 | 12011 | `ErrorCode.ORDER_EXISTS_OR_ADDR_NOT_FOUND` | 订单号已存在 / 收款地址不存在 |
 | 12012 | `ErrorCode.SYSTEM_ERROR` | 系统错误 |
+| 12013 | - | 订单号为空 |
+| 12014 | - | 订单不存在 |
 
 ## 签名说明
 

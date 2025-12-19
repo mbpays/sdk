@@ -82,6 +82,26 @@ fmt.Printf("支付链接: %s\n", paymentLink)
 // 可以将此链接用于生成二维码
 ```
 
+### 5. 查询订单信息
+
+```go
+orderInfo, err := client.GetOrderInfo("ORD202501011200001234567890", 12345)
+if err != nil {
+    // 检查是否是业务错误
+    if mbpayErr, ok := err.(*mbpay.Error); ok {
+        log.Printf("查询失败 [错误码: %d]: %s", mbpayErr.Code, mbpayErr.Message)
+    } else {
+        log.Printf("查询失败: %v", err)
+    }
+    return
+}
+
+fmt.Printf("订单号: %s\n", orderInfo.OrderNo)
+fmt.Printf("平台订单号: %s\n", orderInfo.PlatformOrderNo)
+fmt.Printf("订单金额: %d\n", orderInfo.Amount)
+fmt.Printf("订单状态: %s\n", orderInfo.StatusText)
+```
+
 ## API 文档
 
 ### Client
@@ -150,6 +170,27 @@ fmt.Printf("支付链接: %s\n", paymentLink)
 - 链接中包含订单信息、签名等，用户扫码后可以直接支付
 - 过期时间从生成链接时开始计算
 
+#### GetOrderInfo(orderNo string, merchantID int64) (*OrderInfoResponse, error)
+
+查询订单信息。
+
+**参数：**
+- `orderNo` (必填): 商户订单号
+- `merchantID` (必填): 商户ID
+
+**返回：**
+- `*OrderInfoResponse`: 订单信息响应
+  - `OrderNo`: 商户订单号
+  - `PlatformOrderNo`: 平台订单号
+  - `Amount`: 订单金额
+  - `PlatformFee`: 平台手续费
+  - `Status`: 订单状态
+  - `StatusText`: 订单状态文本
+  - `ExpiresAt`: 过期时间
+  - `CreatedAt`: 创建时间
+  - `PaidAt`: 支付时间
+- `error`: 错误信息
+
 ## 错误处理
 
 SDK 使用自定义错误类型 `mbpay.Error`，包含错误码和错误信息：
@@ -189,6 +230,8 @@ if err != nil {
 | 12010 | 余额不足 |
 | 12011 | 订单号已存在 / 收款地址不存在 |
 | 12012 | 系统错误 |
+| 12013 | 订单号为空 |
+| 12014 | 订单不存在 |
 
 ## 签名说明
 

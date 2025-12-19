@@ -122,6 +122,22 @@ try {
 }
 ```
 
+### 5. 查询订单信息
+
+```php
+use MBPay\Exception\MBPayException;
+
+try {
+    $orderInfo = $client->getOrderInfo('ORD202501011200001234567890', 12345);
+    echo "订单号: {$orderInfo->getOrderNo()}\n";
+    echo "平台订单号: {$orderInfo->getPlatformOrderNo()}\n";
+    echo "订单金额: {$orderInfo->getAmount()}\n";
+    echo "订单状态: {$orderInfo->getStatusText()}\n";
+} catch (MBPayException $e) {
+    echo "查询失败: {$e->getMessage()}\n";
+}
+```
+
 ## API 文档
 
 ### Client
@@ -197,6 +213,29 @@ try {
 - 链接中包含订单信息、签名等，用户扫码后可以直接支付
 - 过期时间从生成链接时开始计算
 
+#### `getOrderInfo(string $orderNo, int $merchantId): OrderInfoResponse`
+
+查询订单信息。
+
+**参数：**
+- `$orderNo` (string, 必填): 商户订单号
+- `$merchantId` (int, 必填): 商户ID
+
+**返回：**
+- `OrderInfoResponse`: 订单信息响应
+  - `getOrderNo()`: 商户订单号
+  - `getPlatformOrderNo()`: 平台订单号
+  - `getAmount()`: 订单金额
+  - `getPlatformFee()`: 平台手续费
+  - `getStatus()`: 订单状态
+  - `getStatusText()`: 订单状态文本
+  - `getExpiresAt()`: 过期时间
+  - `getCreatedAt()`: 创建时间
+  - `getPaidAt()`: 支付时间
+
+**异常：**
+- `MBPayException`: API 业务错误
+
 ## 错误处理
 
 SDK 使用自定义异常类型 `MBPayException`，包含错误码和错误信息：
@@ -235,6 +274,8 @@ try {
 | 12010 | `ErrorCode::INSUFFICIENT_BALANCE` | 余额不足 |
 | 12011 | `ErrorCode::ORDER_EXISTS_OR_ADDR_NOT_FOUND` | 订单号已存在 / 收款地址不存在 |
 | 12012 | `ErrorCode::SYSTEM_ERROR` | 系统错误 |
+| 12013 | - | 订单号为空 |
+| 12014 | - | 订单不存在 |
 
 ## 签名说明
 
