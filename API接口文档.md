@@ -412,7 +412,6 @@ POST /merchant/orderinfo
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
 | order_no | string | 是 | 商户订单号 |
-| merchant_id | int64 | 是 | 商户ID |
 | app_id | string | 是 | 商户的 App ID |
 | timestamp | int64 | 是 | Unix 时间戳 |
 | sign | string | 是 | 签名值 |
