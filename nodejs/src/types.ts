@@ -361,6 +361,106 @@ export class OrderInfoResponse {
     }
 }
 
+/**
+ * 支付订单信息响应
+ */
+export class PayOrderInfoResponse {
+    private orderNo: string;
+    private platformOrderNo: string;
+    private amount: number;
+    private fee: number;
+    private actualAmount: number;
+    private status: number;
+    private statusText: string;
+    private remark: string;
+    private createAt: string;
+    private updateAt: string;
+    private payAddress: string;
+
+    /**
+     * @param orderNo 商户订单号
+     * @param platformOrderNo 平台订单号
+     * @param amount 订单金额
+     * @param fee 手续费
+     * @param actualAmount 实际支付金额
+     * @param status 订单状态
+     * @param statusText 订单状态文本
+     * @param remark 备注
+     * @param createAt 创建时间
+     * @param updateAt 更新时间
+     * @param payAddress 收款地址
+     */
+    constructor(
+        orderNo: string,
+        platformOrderNo: string,
+        amount: number,
+        fee: number,
+        actualAmount: number,
+        status: number,
+        statusText: string,
+        remark: string,
+        createAt: string,
+        updateAt: string,
+        payAddress: string
+    ) {
+        this.orderNo = orderNo;
+        this.platformOrderNo = platformOrderNo;
+        this.amount = amount;
+        this.fee = fee;
+        this.actualAmount = actualAmount;
+        this.status = status;
+        this.statusText = statusText;
+        this.remark = remark;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
+        this.payAddress = payAddress;
+    }
+
+    getOrderNo(): string {
+        return this.orderNo;
+    }
+
+    getPlatformOrderNo(): string {
+        return this.platformOrderNo;
+    }
+
+    getAmount(): number {
+        return this.amount;
+    }
+
+    getFee(): number {
+        return this.fee;
+    }
+
+    getActualAmount(): number {
+        return this.actualAmount;
+    }
+
+    getStatus(): number {
+        return this.status;
+    }
+
+    getStatusText(): string {
+        return this.statusText;
+    }
+
+    getRemark(): string {
+        return this.remark;
+    }
+
+    getCreateAt(): string {
+        return this.createAt;
+    }
+
+    getUpdateAt(): string {
+        return this.updateAt;
+    }
+
+    getPayAddress(): string {
+        return this.payAddress;
+    }
+}
+
 
 
 

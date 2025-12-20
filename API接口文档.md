@@ -11,7 +11,8 @@
   - [1. 获取商户余额](#1-获取商户余额)
   - [2. 生成支付订单](#2-生成支付订单)
   - [3. 商户付款](#3-商户付款)
-  - [4. 查询订单信息](#4-查询订单信息)
+  - [4. 查询收款订单信息](#4-查询订单信息)
+  - [5. 查询支付订单信息](#5-查询支付订单信息)
 - [回调通知](./订单支付成功回调文档.md)
 - [错误码说明](#错误码说明)
 - [金额单位说明](#金额单位说明)
@@ -492,6 +493,108 @@ curl -X POST "https://www.mbpay.world/merchant/orderinfo" \
 1. **订单查询权限**：只能查询属于当前商户的订单
 2. **订单状态**：订单状态包括待支付、已支付、已取消、已过期等
 3. **时间字段**：`paid_at` 字段在订单未支付时为空字符串
+4. **订单不存在**：如果订单不存在或不属于当前商户，将返回错误码 12014
+
+---
+
+### 5. 查询支付订单信息
+
+查询支付(代付)订单的详细信息，包括订单状态、金额、手续费、收款地址等信息。
+
+#### 接口地址
+
+```
+POST /merchant/payorderinfo
+```
+
+#### 请求参数
+
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| order_no | string | 是 | 商户订单号 |
+| app_id | string | 是 | 商户的 App ID |
+| timestamp | int64 | 是 | Unix 时间戳 |
+| sign | string | 是 | 签名值 |
+
+#### 请求示例
+
+```bash
+curl -X POST "https://www.mbpay.world/merchant/payorderinfo" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "order_no=PAY202501011200001234567890" \
+  -d "app_id=your_app_id_123" \
+  -d "timestamp=1704067200" \
+  -d "sign=5f4dcc3b5aa765d61d8327deb882cf99..."
+```
+
+#### 返回结果
+
+**成功响应：**
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "order_no": "PAY202501011200001234567890",
+    "platform_order_no": "202501011200001234567890",
+    "amount": 100,
+    "fee": 1,
+    "actual_amount": 100,
+    "status": 1,
+    "status_text": "已支付",
+    "remark": "商户付款",
+    "create_at": "2025-01-01 12:00:00",
+    "update_at": "2025-01-01 12:10:00",
+    "pay_address": "Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  }
+}
+```
+
+**失败响应：**
+
+```json
+{
+  "code": 12014,
+  "message": "order_not_found",
+  "data": null
+}
+```
+
+#### 返回字段说明
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| order_no | string | 商户订单号 |
+| platform_order_no | string | 平台订单号 |
+| amount | int64 | 订单金额（MB，最小单位：100 = 1MB） |
+| fee | int64 | 手续费（MB，最小单位：100 = 1MB） |
+| actual_amount | int64 | 实际支付金额（MB，最小单位：100 = 1MB） |
+| status | int | 订单状态（0:待支付, 1:已支付, 2:已取消, 3:已过期） |
+| status_text | string | 订单状态文本描述 |
+| remark | string | 备注信息 |
+| create_at | string | 订单创建时间（格式：YYYY-MM-DD HH:mm:ss） |
+| update_at | string | 订单更新时间（格式：YYYY-MM-DD HH:mm:ss） |
+| pay_address | string | 收款地址 |
+
+#### 错误码
+
+| 错误码 | 说明 |
+|--------|------|
+| 0 | 成功 |
+| 12000 | app_id 为空 |
+| 12001 | sign 为空 |
+| 12002 | timestamp 为空 |
+| 12003 | 商户不存在 |
+| 12005 | 签名错误 |
+| 12013 | 订单号为空 |
+| 12014 | 订单不存在 |
+
+#### 业务说明
+
+1. **订单查询权限**：只能查询属于当前商户的支付订单
+2. **订单状态**：订单状态包括待支付、已支付、已取消、已过期等
+3. **金额字段**：`amount` 为订单金额，`fee` 为手续费，`actual_amount` 为实际支付金额（实际支付金额 = 订单金额 + 手续费）
 4. **订单不存在**：如果订单不存在或不属于当前商户，将返回错误码 12014
 
 ---

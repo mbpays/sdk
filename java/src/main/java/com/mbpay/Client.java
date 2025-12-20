@@ -396,6 +396,64 @@ public class Client {
                 paidAt != null ? paidAt : ""
         );
     }
+
+    /**
+     * 查询支付订单信息
+     *
+     * @param orderNo 商户订单号
+     * @param merchantId 商户ID
+     * @return PayOrderInfoResponse 支付订单信息响应
+     * @throws MBPayException
+     */
+    public model.PayOrderInfoResponse getPayOrderInfo(String orderNo, long merchantId) throws MBPayException {
+        // 参数验证
+        if (orderNo == null || orderNo.isEmpty()) {
+            throw new MBPayException(0, "order_no is required");
+        }
+        if (merchantId <= 0) {
+            throw new MBPayException(0, "merchant_id is required and must be greater than 0");
+        }
+
+        // 构建请求参数
+        Map<String, String> params = new HashMap<>();
+        params.put("order_no", orderNo);
+        params.put("merchant_id", String.valueOf(merchantId));
+
+        // 执行请求
+        Response resp = doRequest("POST", "/merchant/payorderinfo", params);
+
+        // 解析 data 字段
+        Map<String, Object> data = resp.getData();
+        String orderNoResp = (String) data.get("order_no");
+        String platformOrderNo = (String) data.getOrDefault("platform_order_no", "");
+        long amount = Long.parseLong(String.valueOf(data.getOrDefault("amount", 0)));
+        long fee = Long.parseLong(String.valueOf(data.getOrDefault("fee", 0)));
+        long actualAmount = Long.parseLong(String.valueOf(data.getOrDefault("actual_amount", 0)));
+        int status = Integer.parseInt(String.valueOf(data.getOrDefault("status", 0)));
+        String statusText = (String) data.getOrDefault("status_text", "");
+        String remark = (String) data.getOrDefault("remark", "");
+        String createAt = (String) data.getOrDefault("create_at", "");
+        String updateAt = (String) data.getOrDefault("update_at", "");
+        String payAddress = (String) data.getOrDefault("pay_address", "");
+
+        if (orderNoResp == null || orderNoResp.isEmpty()) {
+            throw new MBPayException(0, "invalid order_no format in response");
+        }
+
+        return new model.PayOrderInfoResponse(
+                orderNoResp,
+                platformOrderNo != null ? platformOrderNo : "",
+                amount,
+                fee,
+                actualAmount,
+                status,
+                statusText != null ? statusText : "",
+                remark != null ? remark : "",
+                createAt != null ? createAt : "",
+                updateAt != null ? updateAt : "",
+                payAddress != null ? payAddress : ""
+        );
+    }
 }
 
 

@@ -60,6 +60,21 @@ type OrderInfoResponse struct {
 	PaidAt          string `json:"paid_at"`           // 支付时间
 }
 
+// PayOrderInfoResponse 支付订单信息响应
+type PayOrderInfoResponse struct {
+	OrderNo         string `json:"order_no"`          // 商户订单号
+	PlatformOrderNo string `json:"platform_order_no"` // 平台订单号
+	Amount          int64  `json:"amount"`            // 订单金额
+	Fee             int64  `json:"fee"`               // 手续费
+	ActualAmount    int64  `json:"actual_amount"`     // 实际支付金额
+	Status          int    `json:"status"`            // 订单状态
+	StatusText      string `json:"status_text"`       // 订单状态文本
+	Remark          string `json:"remark"`            // 备注
+	CreateAt        string `json:"create_at"`         // 创建时间
+	UpdateAt        string `json:"update_at"`         // 更新时间
+	PayAddress      string `json:"pay_address"`       // 收款地址
+}
+
 // ErrorCode 错误码常量
 const (
 	ErrCodeSuccess                   = 0     // 成功

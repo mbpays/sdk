@@ -13,6 +13,7 @@ export {
     PaymentOrderRequest,
     PaymentOrderResponse,
     OrderInfoResponse,
+    PayOrderInfoResponse,
 } from './types';
 export { MBPayError, ErrorCode } from './error';
 

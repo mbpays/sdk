@@ -102,6 +102,29 @@ fmt.Printf("订单金额: %d\n", orderInfo.Amount)
 fmt.Printf("订单状态: %s\n", orderInfo.StatusText)
 ```
 
+### 6. 查询支付订单信息
+
+```go
+payOrderInfo, err := client.GetPayOrderInfo("PAY202501011200001234567890", 12345)
+if err != nil {
+    // 检查是否是业务错误
+    if mbpayErr, ok := err.(*mbpay.Error); ok {
+        log.Printf("查询失败 [错误码: %d]: %s", mbpayErr.Code, mbpayErr.Message)
+    } else {
+        log.Printf("查询失败: %v", err)
+    }
+    return
+}
+
+fmt.Printf("订单号: %s\n", payOrderInfo.OrderNo)
+fmt.Printf("平台订单号: %s\n", payOrderInfo.PlatformOrderNo)
+fmt.Printf("订单金额: %d\n", payOrderInfo.Amount)
+fmt.Printf("手续费: %d\n", payOrderInfo.Fee)
+fmt.Printf("实际支付金额: %d\n", payOrderInfo.ActualAmount)
+fmt.Printf("订单状态: %s\n", payOrderInfo.StatusText)
+fmt.Printf("收款地址: %s\n", payOrderInfo.PayAddress)
+```
+
 ## API 文档
 
 ### Client
@@ -189,6 +212,29 @@ fmt.Printf("订单状态: %s\n", orderInfo.StatusText)
   - `ExpiresAt`: 过期时间
   - `CreatedAt`: 创建时间
   - `PaidAt`: 支付时间
+- `error`: 错误信息
+
+#### GetPayOrderInfo(orderNo string, merchantID int64) (*PayOrderInfoResponse, error)
+
+查询支付订单信息。
+
+**参数：**
+- `orderNo` (必填): 商户订单号
+- `merchantID` (必填): 商户ID
+
+**返回：**
+- `*PayOrderInfoResponse`: 支付订单信息响应
+  - `OrderNo`: 商户订单号
+  - `PlatformOrderNo`: 平台订单号
+  - `Amount`: 订单金额
+  - `Fee`: 手续费
+  - `ActualAmount`: 实际支付金额
+  - `Status`: 订单状态
+  - `StatusText`: 订单状态文本
+  - `Remark`: 备注
+  - `CreateAt`: 创建时间
+  - `UpdateAt`: 更新时间
+  - `PayAddress`: 收款地址
 - `error`: 错误信息
 
 ## 错误处理

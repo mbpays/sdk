@@ -26,6 +26,7 @@ git@github.com:mbpay/sdk.git
 - ✅ **商户付款** - 商户向用户地址付款
 - ✅ **支付链接生成** - 生成支付二维码链接
 - ✅ **订单信息查询** - 查询订单详细信息
+- ✅ **支付订单信息查询** - 查询支付订单详细信息
 - ✅ **自动签名** - 自动生成和验证签名
 - ✅ **错误处理** - 完整的错误码和异常处理
 - ✅ **类型安全** - 完整的类型定义和参数验证
@@ -176,6 +177,37 @@ mvn clean install
     "expires_at": "2025-01-01 12:15:00",
     "created_at": "2025-01-01 12:00:00",
     "paid_at": "2025-01-01 12:10:00"
+  }
+}
+```
+
+### 5. 查询支付订单信息
+
+**接口：** `POST /merchant/payorderinfo`
+
+**必传参数：**
+- `order_no` - 商户订单号
+- `app_id` - 商户的 App ID
+- `timestamp` - 时间戳
+- `sign` - 签名值
+
+**返回：**
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "order_no": "PAY202501011200001234567890",
+    "platform_order_no": "202501011200001234567890",
+    "amount": 100,
+    "fee": 1,
+    "actual_amount": 100,
+    "status": 1,
+    "status_text": "已支付",
+    "remark": "商户付款",
+    "create_at": "2025-01-01 12:00:00",
+    "update_at": "2025-01-01 12:10:00",
+    "pay_address": "Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
   }
 }
 ```
