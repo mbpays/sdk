@@ -236,7 +236,6 @@ POST /merchant/generatepaylink
 ```bash
 curl -X POST "https://www.mbpay.world/merchant/generatepaylink" \
   -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "merchant_id=1" \
   -d "order_no=ORD202501011200001234567890" \
   -d "subject=购买VIP会员" \
   -d "amount=10000" \

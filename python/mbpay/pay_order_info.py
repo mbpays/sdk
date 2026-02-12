@@ -69,3 +69,6 @@ def get_pay_order_info(self: Client, order_no: str, merchant_id: int) -> PayOrde
 # 将方法绑定到 Client 类
 Client.get_pay_order_info = get_pay_order_info
 
+
+
+
